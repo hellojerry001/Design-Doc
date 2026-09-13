@@ -1,6 +1,6 @@
 ---
 name: project-docs-site
-description: 把任意项目（尤其前端 / 设计系统 / 组件库）的源码资产，整理成「文档=实现」的结构化文档站。基于 VitePress 单轨，四大板块（指南 / 设计 / 组件 / API），配置驱动，可交互预览优先于截图。多个项目时可在上层加一个「项目管理门户」页面统一入口（搜索 + 筛选 + 6 列卡片）。适用：设计师或前端想把单个或多个项目做成规范化文档站时。
+description: 把任意项目（尤其前端 / 设计系统 / 组件库）的源码资产，整理成「文档=实现」的结构化文档站。基于 VitePress 单轨，四大板块（指南 / 设计 / 组件 / API），配置驱动，可交互预览优先于截图。也适用于在已有 docs-site 里新增或修改「跟随真实源码」的页面（?raw 解析源码 / 注册主题组件 / 布局与浏览器验证陷阱）。多个项目时可在上层加一个「项目管理门户」页面统一入口（搜索 + 筛选 + 6 列卡片）。适用：设计师或前端想从零建站、增量维护页面、或用门户统一管理多个项目文档时。
 ---
 
 # project-docs-site —— 把项目做成结构化文档站
@@ -84,6 +84,16 @@ npm run docs:build && node scripts/verify-docs.mjs
 
 模板：`templates/portal-index.html`（改 `PROJECTS` 数组即可）、`templates/serve.mjs`。
 
+## 建站之后的增量维护
+
+站建好后往里加页面 / 改页面（尤其「组件预览 / 图标资源 / 设计变量」这类必须不漂移的展示页）：
+
+- **核心手法**：`?raw` 取源码原文 → 构建期解析 → 主题组件渲染。不用快照，从根上杜绝漂移。
+- **四步范式**：写 `.vue` → `theme/index.ts` 里 **注册**（只 import 不注册 = 页面静默空白）→ `.md` 里放标签 → `config.mts` 加菜单（不加 = 死链，build 会报）。
+- **验证**：dev 下 `curl` 对任何路径都返回 200，**不能用它判断页面是否存在**；必须开真实浏览器数节点。
+
+→ 详见 `references/real-source-pages.md`（通用手法）与 `references/design-qa-site.md`（本站事实：端口 5180、组件清单、验收硬指标）。
+
 ## 你唯一要手改的两个文件
 
 - **`theme/docs.config.ts`** —— 产品名、板块开关、预览作用域、token/图标源清单、数据来源标注。
@@ -111,6 +121,8 @@ npm run docs:build && node scripts/verify-docs.mjs
 - `references/walkthrough.md` —— **第二个真实项目（antd-ui-kit，React+TS）的端到端记录**，证明本 skill 不止在本项目成立。
 - `references/adapters/` —— 四类资产的接入方式（tokens / icons / components / api）。
 - `references/multi-project-portal.md` —— **多项目门户**：层级、数据模型、布局规格、三个必踩的坑、验收清单。
+- `references/real-source-pages.md` —— **增量维护**：`?raw` 读源码、解析未导出常量 / CSS、组件四步范式、补充验证项。
+- `references/design-qa-site.md` —— **本站实例**：design-qa 文档站的端口 / 组件 / 选择器 / 验收硬指标（换项目整份替换）。
 - `templates/` —— 6 份页面骨架（home / guide / token / gallery / component / api），抄了就能填；
   外加门户两件套 `portal-index.html` + `serve.mjs`。
 

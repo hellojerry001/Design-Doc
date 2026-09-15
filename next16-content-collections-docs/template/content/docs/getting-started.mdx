@@ -1,0 +1,83 @@
+---
+title: Getting Started
+description: Install and start using Spell Style components in your project.
+order: 1
+---
+
+# Getting Started
+
+Spell Style is a collection of **copy-and-paste** React components built with
+Tailwind CSS and TypeScript. You own the code — no package to install, no
+version lock-in.
+
+## Install Tailwind CSS
+
+This template ships with Tailwind CSS v4. If you are adding it to an existing
+project, install the PostCSS plugin:
+
+```bash
+npm install tailwindcss @tailwindcss/postcss
+```
+
+Then create `postcss.config.mjs`:
+
+```js
+const config = {
+  plugins: {
+    "@tailwindcss/postcss": {},
+  },
+};
+
+export default config;
+```
+
+## Add a component
+
+Copy a component source file into your project and import it:
+
+```tsx
+import { ShimmerText } from "@/components/shimmer-text";
+
+export function Hero() {
+  return <ShimmerText text="Hello, Spell Style" />;
+}
+```
+
+## Theming
+
+Dark mode is handled by `next-themes` and Tailwind's class strategy. Toggle it
+from the header — the Shiki code blocks switch between `github-light` and
+`github-dark` automatically.
+
+> Tip: every component is fully typed and tree-shakeable.
+
+## Embedding a live preview
+
+Drop a `<ComponentPreview>` block into any `.mdx` file to get the
+**Preview / Code** switch, a copy button, a replay button and an
+"Open in v0" shortcut:
+
+```mdx
+<ComponentPreview name="text-marquee" />
+```
+
+`name` does two things at once:
+
+1. looks up the demo component in `registry/index.ts` for the left pane;
+2. reads `registry/examples/<name>.tsx` for the right pane.
+
+So the preview and the code shown are always the same source — no copy to keep
+in sync. Adding a new component is a two-file change: drop an example in
+`registry/examples/`, then register it in `registry/index.ts`.
+
+Prefer to inline everything? Pass the source and the preview explicitly:
+
+```mdx
+<ComponentPreview code={`export function Demo() { return <span>Hi</span>; }`}>
+  <Demo />
+</ComponentPreview>
+```
+
+Other props: `lang` (default `tsx`), `openInV0={false}` to hide the v0 button,
+`v0Url` to point it somewhere else, `previewClassName` to tweak the preview
+canvas.

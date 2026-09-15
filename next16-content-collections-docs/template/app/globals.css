@@ -1,0 +1,175 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/* Enable class-based dark mode for next-themes (.dark on <html>) */
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+}
+
+/* 展示墙上用到的两款字体：衬线斜体（Light Rays）+ 手写体（Scroll Studio）。
+   字体在 layout.tsx 里通过 Google Fonts 引入；离线时回落到系统字体。 */
+@theme {
+  --font-display: "Instrument Serif", ui-serif, Georgia, Cambria, "Times New Roman", serif;
+  --font-script: "Caveat", "Snell Roundhand", "Bradley Hand", "Segoe Script", cursive;
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #0a0a0a;
+  --muted: #f4f4f5;
+  --muted-foreground: #71717a;
+  --border: #e4e4e7;
+}
+
+.dark {
+  --background: #0a0a0a;
+  --foreground: #fafafa;
+  --muted: #18181b;
+  --muted-foreground: #a1a1aa;
+  --border: #27272a;
+}
+
+* {
+  border-color: var(--border);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---- Shiki dual-theme code blocks (github-light / github-dark) ---- */
+.shiki {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  margin: 1.5rem 0;
+}
+
+/* When defaultColor is false, Shiki emits CSS vars for both themes.
+   We switch them based on the .dark class set by next-themes. */
+html:not(.dark) .shiki,
+html:not(.dark) .shiki span {
+  color: var(--shiki-light) !important;
+  background-color: var(--shiki-light-bg) !important;
+}
+
+html.dark .shiki,
+html.dark .shiki span {
+  color: var(--shiki-dark) !important;
+  background-color: var(--shiki-dark-bg) !important;
+}
+
+/* Inline code that is NOT inside a .shiki block */
+:not(.shiki) > code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.875em;
+  background: var(--muted);
+  padding: 0.15rem 0.35rem;
+  border-radius: 0.3rem;
+}
+
+/* Anchor links injected by rehype-autolink-headings */
+.subheading-anchor {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* ---- ComponentPreview: Code 标签内的代码块 ---- */
+/* 覆盖全局 .shiki 的外边距/圆角，让它贴合预览卡片边缘 */
+.preview-code .shiki {
+  margin: 0;
+  padding: 1.25rem 3.5rem 1.25rem 1.25rem;
+  border-radius: 0;
+  max-height: 420px;
+  overflow: auto;
+  font-size: 0.8125rem;
+  background-color: transparent !important;
+}
+
+/* Code 区内的 inline code 不该再带底色（避免 prose / 全局兜底样式干扰） */
+.preview-code .shiki code {
+  background: transparent;
+  padding: 0;
+  border: 0;
+  font-size: inherit;
+}
+
+/* ---- 展示墙卡片动画关键帧 ---- */
+/* Light Rays：光锥轻微旋转 + 呼吸 */
+@keyframes rays-drift {
+  0%,
+  100% {
+    transform: rotate(0deg) scale(1);
+    opacity: 0.85;
+  }
+  50% {
+    transform: rotate(4deg) scale(1.04);
+    opacity: 1;
+  }
+}
+
+/* Scroll Studio：手写体逐字"写出来"（background 位置扫过） */
+@keyframes handwriting {
+  0% {
+    background-position: 100% 0;
+  }
+  60%,
+  100% {
+    background-position: 0% 0;
+  }
+}
+
+/* Shimmer Text：高光循环扫过（200% 周期，无缝循环） */
+@keyframes shimmer-sweep {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+/* Exploding Input：粒子飞出 + 缩小淡出（--tx/--ty 由组件注入） */
+@keyframes particle-burst {
+  0% {
+    transform: translate(-50%, -50%) translate(0, 0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) translate(var(--tx), var(--ty)) scale(0.2);
+    opacity: 0;
+  }
+}
+
+/* Animated Heading：入场——上移 + 去模糊 */
+@keyframes word-in {
+  0% {
+    opacity: 0;
+    transform: translateY(0.4em);
+    filter: blur(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+/* 尊重系统"减少动态效果"偏好：关掉展示墙的装饰动画 */
+@media (prefers-reduced-motion: reduce) {
+  .shiki,
+  [style*="animation"] {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

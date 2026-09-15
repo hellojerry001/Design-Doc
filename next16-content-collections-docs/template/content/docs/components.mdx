@@ -1,0 +1,42 @@
+---
+title: Components
+description: Browse all available components in Spell Style.
+order: 2
+---
+
+# Components
+
+A growing set of refined UI components for design engineers. Click any component
+to read its documentation and copy the source.
+
+## Text
+
+- **[Text Marquee](/docs/text-marquee)** — vertical infinite scrolling text with center focus
+- **Shimmer Text** — animated shimmer highlight
+- **Blur Reveal** — text reveal with blur effect
+
+## Cards
+
+- **Spotify Card** — track with album art and blurred background
+- **Tilt Card** — interactive 3D tilt on hover
+- **Perspective Book** — 3D book with hover animation
+
+## Buttons
+
+- **Rich Button** — color variants
+- **Flow Button** — animated dashed border
+- **Pop Button** — 3D push-down effect
+
+## Example
+
+```tsx
+import { TiltCard } from "@/components/tilt-card";
+
+export function Showcase() {
+  return (
+    <TiltCard>
+      <div className="p-6">Hover me</div>
+    </TiltCard>
+  );
+}
+```

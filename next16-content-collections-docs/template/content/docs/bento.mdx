@@ -1,0 +1,64 @@
+---
+title: Bento Showcase
+description: A responsive bento grid of animated, copy-paste cards — the same wall used on the homepage.
+order: 4
+---
+
+The homepage wall is built from two primitives — `BentoGrid` and `BentoCard` —
+plus a set of self-contained visual cards. Every card is a Server Component
+(unless it needs interaction), so the animations cost zero client-side JS.
+
+<BentoShowcase />
+
+## Anatomy
+
+```tsx
+import { BentoCard, BentoGrid } from "@/registry/spell-ui/bento-grid";
+
+<BentoGrid>
+  <BentoCard label="Light Rays" className="lg:row-span-2 lg:col-span-2">
+    {/* any content — absolute, centered, or edge-aligned */}
+  </BentoCard>
+  <BentoCard label="Pop Button">
+    {/* a 1×1 cell */}
+  </BentoCard>
+</BentoGrid>
+```
+
+### `BentoGrid`
+
+A 4-column grid with a fixed row height (`190px`). It collapses to 2 columns on
+`sm` and 1 column on mobile. Cells combine to form irregular shapes via
+`col-span-*` / `row-span-*`.
+
+| Prop | Type | Default | Notes |
+| --- | --- | --- | --- |
+| `className` | `string` | — | Grid-level spans go here (e.g. `gap-4`) |
+
+### `BentoCard`
+
+A single cell. The content area is `flex-1` and clips overflow; the `label`
+sits in the bottom-left corner.
+
+| Prop | Type | Default | Notes |
+| --- | --- | --- | --- |
+| `label` | `string` | — | bottom-left caption |
+| `action` | `ReactNode` | — | sits to the right of the label (links, buttons) |
+| `contentClassName` | `string` | — | extra classes on the content wrapper |
+
+## The cards
+
+| Card | Interactive | What it shows |
+| --- | --- | --- |
+| `LightRays` | no | radiating light cone + centered title |
+| `ExplodingInput` | **yes** | sparks fly out on each keystroke |
+| `SpotifyNowPlaying` | no | mini now-playing tile |
+| `PopButton` | no | 3D hard-shadow button that depresses on press |
+| `DesignPlatformCard` | no | book-cover style card with perspective |
+| `ScrollStudio` | no | handwritten text reveal (loops) |
+| `AnimatedHeading` | **yes** | rotating keyword in the heading |
+| `ShimmerText` | no | sweeping highlight across text |
+
+To add your own: drop a component into `registry/spell-ui/`, compose it in
+`registry/examples/bento-showcase.tsx`, and it shows up on the homepage
+instantly.

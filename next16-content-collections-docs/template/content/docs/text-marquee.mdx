@@ -1,0 +1,57 @@
+---
+title: Text Marquee
+description: 垂直无限滚动的文字跑马灯，中轴聚焦、上下渐隐。
+order: 3
+---
+
+# Text Marquee
+
+垂直方向的无限文字跑马灯。条目按「到中轴的距离」做缩放与透明度衰减，中轴项最大最实，
+越远越小越淡，配合上下遮罩形成柔和的聚焦感 —— 非常适合展示品牌名、客户名单或关键词轮播。
+
+<ComponentPreview name="text-marquee" />
+
+## 安装
+
+把组件源码复制到你的项目：
+
+```bash
+npx spell-ui add text-marquee
+```
+
+或者手动创建 `registry/spell-ui/text-marquee.tsx`，内容与上方 **Code** 标签中的示例一致（示例为调用方写法，
+组件本体可在源码仓库的同一目录下找到）。
+
+## 用法
+
+```tsx
+import { TextMarquee } from "@/registry/spell-ui/text-marquee";
+
+export function Demo() {
+  return (
+    <TextMarquee
+      items={["hugh", "alex", "emily"]}
+      height={250}
+      speed={1}
+      prefix={<span className="text-3xl text-muted-foreground/75">spell.sh/</span>}
+    />
+  );
+}
+```
+
+## Props
+
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| `items` | `string[]` | — | 参与滚动的文案列表，循环播放 |
+| `height` | `number` | `250` | 可视区域高度（px） |
+| `speed` | `number` | `1` | 滚动速度：每秒前进多少个条目 |
+| `visible` | `number` | `5` | 同时可见的条目数量，影响条目间距 |
+| `direction` | `"up" \| "down"` | `"up"` | 滚动方向 |
+| `prefix` | `ReactNode` | — | 仅在中轴（激活项）上渲染的前缀节点 |
+| `itemClassName` | `string` | — | 追加到每个条目文本上的类名 |
+
+## 无障碍
+
+组件会尊重系统的「减少动态效果」设置（`prefers-reduced-motion`）—— 开启时动画自动停止，
+并把非中轴条目标记为 `aria-hidden`，屏幕阅读器只会读到当前聚焦的条目。
